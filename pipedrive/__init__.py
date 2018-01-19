@@ -25,7 +25,7 @@ class IncorrectLoginError(PipedriveError):
 
 
 class Pipedrive(object):
-    def _request(self, endpoint, data, start, limit, method='POST'):
+    def _request(self, endpoint, data, method='POST', start=0, limit=100):
         # avoid storing the string 'None' when a value is None
         data = {k: "" if v is None else v for k, v in data.items()}
         if method == "GET":
@@ -65,7 +65,7 @@ class Pipedrive(object):
 
     def __getattr__(self, name):
         def wrapper(data={}, method='GET', start=0, limit=100):
-            response = self._request(name.replace('_', '/'), data, method, start, limit)
+            response = self._request(name.replace('_', '/'), data, method, start=start, limit=limit)
             if 'error' in response:
                 raise PipedriveError(response)
             return response
