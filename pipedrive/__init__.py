@@ -25,7 +25,7 @@ class IncorrectLoginError(PipedriveError):
 
 
 class Pipedrive(object):
-    def _request(self, endpoint, data, method='POST', start=0, limit=100):
+    def _request(self, endpoint, data, start, limit, method='POST'):
         # avoid storing the string 'None' when a value is None
         data = {k: "" if v is None else v for k, v in data.items()}
         if method == "GET":
