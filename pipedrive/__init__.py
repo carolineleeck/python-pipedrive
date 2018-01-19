@@ -64,7 +64,7 @@ class Pipedrive(object):
             self.api_token = email
 
     def __getattr__(self, name):
-        def wrapper(data={}, method='GET', start, limit):
+        def wrapper(data={}, method='GET', start=0, limit=100):
             response = self._request(name.replace('_', '/'), data, method, start, limit)
             if 'error' in response:
                 raise PipedriveError(response)
