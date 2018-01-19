@@ -25,13 +25,14 @@ class IncorrectLoginError(PipedriveError):
 
 
 class Pipedrive(object):
-    def _request(self, endpoint, data, method='POST'):
+    def _request(self, endpoint, data, method='POST', start=0, limit=100):
         # avoid storing the string 'None' when a value is None
         data = {k: "" if v is None else v for k, v in data.items()}
         if method == "GET":
             uri = PIPEDRIVE_API_URL + endpoint + '?api_token=' + str(self.api_token)
             if data:
                 uri += '&' + urlencode(data)
+            uri += '&start=' + str(start) + '&limit=' + str(limit)
             response, data = self.http.request(uri, method=method, headers={'Content-Type': 'application/x-www-form-urlencoded'})
         else:
             uri = PIPEDRIVE_API_URL + endpoint + '?api_token=' + str(self.api_token)
@@ -62,9 +63,9 @@ class Pipedrive(object):
             # Assume that login is actually the api token
             self.api_token = email
 
-    def __getattr__(self, name):
+    def __getattr__(self, name, start=0, limit=100):
         def wrapper(data={}, method='GET'):
-            response = self._request(name.replace('_', '/'), data, method)
+            response = self._request(name.replace('_', '/'), data, method, start, limit)
             if 'error' in response:
                 raise PipedriveError(response)
             return response
