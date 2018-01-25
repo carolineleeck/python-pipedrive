@@ -30,9 +30,11 @@ class Pipedrive(object):
         data = {k: "" if v is None else v for k, v in data.items()}
         if method == "GET":
             uri = PIPEDRIVE_API_URL + endpoint + '?api_token=' + str(self.api_token)
+            
             if data:
                 uri += '&' + urlencode(data)
             uri += '&start=' + str(start) + '&limit=' + str(limit)
+            print(uri)
             response, data = self.http.request(uri, method=method, headers={'Content-Type': 'application/x-www-form-urlencoded'})
         else:
             uri = PIPEDRIVE_API_URL + endpoint + '?api_token=' + str(self.api_token)
@@ -66,6 +68,7 @@ class Pipedrive(object):
     def __getattr__(self, name):
         def wrapper(data={}, method='GET', start=0, limit=100):
             response = self._request(name.replace('_', '/'), data, method, start=start, limit=limit)
+            
             if 'error' in response:
                 raise PipedriveError(response)
             return response
