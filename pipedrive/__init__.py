@@ -68,6 +68,7 @@ class Pipedrive(object):
     def __getattr__(self, name):
         def wrapper(data={}, method='GET', start=0, limit=100, deal_id=None):
             if deal_id:
+                print(deal_id)
                 name.replace('deals_', 'deals_{}_'.format(deal_id))
             response = self._request(name.replace('_', '/'), data, method, start=start, limit=limit)
             # todo: better error handling
