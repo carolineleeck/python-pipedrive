@@ -34,7 +34,6 @@ class Pipedrive(object):
             if data:
                 uri += '&' + urlencode(data)
             uri += '&start=' + str(start) + '&limit=' + str(limit)
-            print(uri)
             response, data = self.http.request(uri, method=method, headers={'Content-Type': 'application/x-www-form-urlencoded'})
         else:
             uri = PIPEDRIVE_API_URL + endpoint + '?api_token=' + str(self.api_token)
