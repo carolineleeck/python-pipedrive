@@ -47,6 +47,7 @@ class Pipedrive(object):
 
     def __getattr__(self, name):
         def wrapper(data={}, method='GET', start=0, limit=100, params=None):
+            params = params or dict()
             if params.get('deal_id'):
                 response = self._request(name.replace('deals', 'deals_{}'.format(params.get('deal_id'))).replace('_', '/'), data, method, start=start, limit=limit)
             elif params.get('org_id'):
