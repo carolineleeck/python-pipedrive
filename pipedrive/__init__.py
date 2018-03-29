@@ -46,11 +46,11 @@ class Pipedrive(object):
         self.api_token = api_token
 
     def __getattr__(self, name):
-        def wrapper(data={}, method='GET', start=0, limit=100, deal_id=None, **kwargs):
-            if deal_id:
-                response = self._request(name.replace('deals', 'deals_{}'.format(deal_id)).replace('_', '/'), data, method, start=start, limit=limit)
-            elif kwargs.get('org_id'):
-                response = self._request(name.replace('organizations', 'organizations_{}'.format(kwargs.get('org_id'))).replace('_', '/'), data, method, start=start, limit=limit)
+        def wrapper(data={}, method='GET', start=0, limit=100, params=None):
+            if params.get('deal_id'):
+                response = self._request(name.replace('deals', 'deals_{}'.format(params.get('deal_id'))).replace('_', '/'), data, method, start=start, limit=limit)
+            elif params.get('org_id'):
+                response = self._request(name.replace('organizations', 'organizations_{}'.format(params.get('org_id'))).replace('_', '/'), data, method, start=start, limit=limit)
             else:
                 response = self._request(name.replace('_', '/'), data, method, start=start, limit=limit)
             
