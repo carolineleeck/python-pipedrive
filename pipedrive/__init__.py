@@ -46,11 +46,11 @@ class Pipedrive(object):
         self.api_token = api_token
 
     def __getattr__(self, name):
-        def wrapper(data={}, method='GET', start=0, limit=100, deal_id=None):
-            if deal_id:
-                response = self._request(name.replace('deals', 'deals_{}'.format(deal_id)).replace('_', '/'), data, method, start=start, limit=limit)
-            else:
-                response = self._request(name.replace('_', '/'), data, method, start=start, limit=limit)
+        def wrapper(data={}, method='GET', start=0, limit=100,  **kwargs):
+            if kwargs.get('deal_id'):
+                response = self._request(name.replace('deals', 'deals_{}'.format(kwargs.get('deal_id'))).replace('_', '/'), data, method, start=start, limit=limit)
+            elif kwargs.get('org_id'):
+                response = self._request(name.replace('organizations', 'organizations_{}'.format(kwargs.get('org_id'))).replace('_', '/'), data, method, start=start, limit=limit)
             
             if 'error' in response:
                 raise PipedriveError(response)
