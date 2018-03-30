@@ -36,11 +36,10 @@ class Pipedrive(object):
         elif method == "PUT":
             uri = PIPEDRIVE_API_URL + endpoint + '?api_token=' + str(self.api_token)
             r = requests.put(uri, data=data)
-
-        logger.debug('sending {method} request to {uri}'.format(
-            method=method,
-            uri=uri
-        ))
+        # logger.debug('sending {method} request to {uri}'.format(
+        #     method=method,
+        #     uri=uri
+        # ))
         
         return r.json()
 
