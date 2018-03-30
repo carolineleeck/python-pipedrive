@@ -30,9 +30,12 @@ class Pipedrive(object):
                 uri += '&' + urlencode(data)
             uri += '&start=' + str(start) + '&limit=' + str(limit)
             r = requests.get(uri)
-        elif method == 'POST':
+        elif method == "POST":
             uri = PIPEDRIVE_API_URL + endpoint + '?api_token=' + str(self.api_token)
             r = requests.post(uri, data=data)
+        elif method == "PUT":
+            uri = PIPEDRIVE_API_URL + endpoint + '?api_token=' + str(self.api_token)
+            r = requests.put(uri, data=data)
 
         logger.debug('sending {method} request to {uri}'.format(
             method=method,
@@ -49,13 +52,34 @@ class Pipedrive(object):
         def wrapper(data={}, method='GET', start=0, limit=100, params=None):
             params = params or dict()
             if params.get('deal_id'):
-                response = self._request(name.replace('deals', 'deals_{}'.format(params.get('deal_id'))).replace('_', '/'), data, method, start=start, limit=limit)
+                response = self._request(
+                    name \
+                        .replace("deals", "deals_{}"
+                            .format(params.get("deal_id"))) \
+                        .replace('_', '/'), 
+                    data, 
+                    method, 
+                    start=start, 
+                    limit=limit
+                )
             elif params.get('org_id'):
-                response = self._request(name.replace('organizations', 'organizations_{}'.format(params.get('org_id'))).replace('_', '/'), data, method, start=start, limit=limit)
+                response = self._request(
+                    name \
+                        .replace("organizations", "organizations_{}"
+                            .format(params.get('org_id'))) \
+                        .replace('_', '/'), 
+                        data, 
+                        method, 
+                        start=start, 
+                        limit=limit
+                    )
             else:
-                response = self._request(name.replace('_', '/'), data, method, start=start, limit=limit)
-            
-            if 'error' in response:
-                raise PipedriveError(response)
+                response = self._request(
+                    name.replace('_', '/'), 
+                    data, 
+                    method, 
+                    start=start, 
+                    limit=limit
+                )            
             return response
         return wrapper
